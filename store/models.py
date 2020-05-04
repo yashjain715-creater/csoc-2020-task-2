@@ -16,6 +16,14 @@ class Book(models.Model):
     def __str__(self):
         return f'{self.title} by {self.author}'
 
+class rating(models.Model):
+    book = models.ForeignKey(Book, related_name='book', on_delete=models.CASCADE)
+    rate = models.FloatField(default=0.0)
+    user = models.ForeignKey(User, related_name='rate', null=True, blank=True, on_delete=models.SET_NULL)
+
+    def __str__(self):
+        return f'{self.book}'
+
 
 class BookCopy(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)

@@ -14,8 +14,8 @@
     <dd>{{ book.author }}</dd>
     <dt>Description:</dt>
     <dd>{{ book.description }}</dd>
-    <dt>Rating:</dt>
-    <dd>{{ book.rating }}</dd>
+    <dt>Your Rating:</dt>
+	<dd><input type="number"  min="0" max="10" value="{{ rate }}" id="rate"><button class="btn btn-primary ml-3" onclick="rating({{ book.id }})">Rate</button></dd>
     <dt>MRP:</dt>
     <dd>Rs. {{ book.mrp }}</dd>
     <dt>Available Copies:</dt>
@@ -36,7 +36,7 @@ $("#loan-button").click(function(){
                 window.location.replace("/books/loaned");
 			}
 			else{
-				alert("Unable to issue this book");
+				alert("Sorry Book not available");
 			}
 		},
 		error: function(xhr, status, err){
@@ -45,5 +45,27 @@ $("#loan-button").click(function(){
 
 	})
 })
+
+function rating(bid){
+	const rate = document.querySelector('#rate').value
+	$.ajax({
+		url: "{% url 'ratingsystem' %}",
+		method: "POST",
+		data: {
+			bid: bid,
+			rate: rate
+		},
+		success: function(data, status, xhr){
+			if(data['message'] == "success"){
+                window.location.reload();}
+			else{
+				alert("Please Login First");
+			}
+		},
+		error: function(xhr, status, err){
+			alert("Some error occured");
+		}
+	})
+}
 </script>
 {% endblock %}
